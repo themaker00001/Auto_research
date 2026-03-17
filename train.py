@@ -9,6 +9,7 @@ Usage:
 import argparse
 import datetime
 import gc
+import json
 import math
 import os
 import subprocess
@@ -634,6 +635,14 @@ if __name__ == "__main__":
     print(f"num_steps:        {step}")
     print(f"num_params_M:     {num_params / 1e6:.1f}")
     print(f"depth:            {DEPTH}")
+
+    # Save model checkpoint
+    checkpoint_dir = Path(__file__).parent / "checkpoint"
+    checkpoint_dir.mkdir(exist_ok=True)
+    model.save_weights(str(checkpoint_dir / "model.npz"))
+    with open(checkpoint_dir / "config.json", "w") as f:
+        json.dump(asdict(config), f, indent=2)
+    print(f"Model saved to {checkpoint_dir}")
 
     # Save results to TSV
     results_file = Path(__file__).parent / "results.tsv"

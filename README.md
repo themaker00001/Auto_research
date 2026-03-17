@@ -110,6 +110,26 @@ git log --oneline
 
 Key metric: `val_bpb` (bits per byte) — **lower is better**.
 
+## Checking if the Model Learned Your Writing
+
+After training, generate text to see if it sounds like you:
+
+```bash
+# Continue a prompt in your style
+uv run generate.py "The most important thing about"
+
+# Free generation (no prompt)
+uv run generate.py
+
+# More creative output
+uv run generate.py "I've been thinking about" --temperature 1.1 --max-tokens 300
+
+# More focused output
+uv run generate.py "I've been thinking about" --temperature 0.5
+```
+
+If the model has learned your corpus, the output should resemble your vocabulary, sentence structure, and topics — even if it's not always coherent. A `val_bpb` below ~2.0 usually means noticeable style pickup.
+
 ## Running the Agent Loop
 
 ```bash
@@ -139,7 +159,9 @@ Expect **~10–12 experiments per hour**, or **~80–100 overnight**.
 | `collect_my_writing.py` | Gathers `.md` and `.docx` files into `corpus.txt` |
 | `prepare.py` | Splits corpus, trains BPE tokenizer (modified from ClimbMix version) |
 | `train.py` | Single training run (auto-saves results and pushes to git) |
+| `generate.py` | Load trained model and generate text from a prompt |
 | `results.tsv` | Training run history (timestamp, val_bpb, params, etc.) |
+| `checkpoint/` | Saved model weights and config (gitignored, local only) |
 | `program.md` | Instructions the agent follows during the experiment loop |
 | `analysis.ipynb` | Notebook to review experiment results |
 | `progress.png` | Auto-generated chart of BPB improvement over experiments |

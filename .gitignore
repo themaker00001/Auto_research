@@ -12,6 +12,9 @@ worktrees/
 results/
 queue/
 
+# Model checkpoints (large binary files)
+checkpoint/
+
 # Agent prompt files (generated per-session by launchers)
 CLAUDE.md
 AGENTS.md
