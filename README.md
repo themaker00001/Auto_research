@@ -77,6 +77,39 @@ uv run train.py
 
 If you hit an OOM error, lower `FINAL_EVAL_BATCH_SIZE` to `16` in `train.py`.
 
+After each run, results are automatically saved to `results.tsv` and pushed to git.
+
+## Running a Training Run
+
+### Quick test (5 minutes)
+```bash
+uv run train.py
+```
+
+### Overnight run (8 hours)
+```bash
+uv run train.py --time-budget 28800
+```
+
+### Full night (10 hours)
+```bash
+uv run train.py --time-budget 36000
+```
+
+When training finishes, results are saved to `results.tsv` and automatically committed and pushed to git.
+
+### Checking results
+
+```bash
+# See all training runs
+cat results.tsv
+
+# Check git history
+git log --oneline
+```
+
+Key metric: `val_bpb` (bits per byte) — **lower is better**.
+
 ## Running the Agent Loop
 
 ```bash
@@ -105,7 +138,8 @@ Expect **~10–12 experiments per hour**, or **~80–100 overnight**.
 |------|---------|
 | `collect_my_writing.py` | Gathers `.md` and `.docx` files into `corpus.txt` |
 | `prepare.py` | Splits corpus, trains BPE tokenizer (modified from ClimbMix version) |
-| `train.py` | Single training run |
+| `train.py` | Single training run (auto-saves results and pushes to git) |
+| `results.tsv` | Training run history (timestamp, val_bpb, params, etc.) |
 | `program.md` | Instructions the agent follows during the experiment loop |
 | `analysis.ipynb` | Notebook to review experiment results |
 | `progress.png` | Auto-generated chart of BPB improvement over experiments |

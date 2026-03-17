@@ -7,11 +7,14 @@ Usage:
 """
 
 import argparse
+import datetime
 import gc
 import math
 import os
+import subprocess
 import time
 from dataclasses import dataclass, asdict
+from pathlib import Path
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -631,3 +634,28 @@ if __name__ == "__main__":
     print(f"num_steps:        {step}")
     print(f"num_params_M:     {num_params / 1e6:.1f}")
     print(f"depth:            {DEPTH}")
+
+    # Save results to TSV
+    results_file = Path(__file__).parent / "results.tsv"
+    write_header = not results_file.exists()
+    timestamp = datetime.datetime.now().isoformat()
+    with open(results_file, "a") as f:
+        if write_header:
+            f.write("timestamp\tval_bpb\ttraining_seconds\ttotal_seconds\tpeak_vram_mb\ttotal_tokens_M\tnum_steps\tnum_params_M\tdepth\ttime_budget\n")
+        f.write(f"{timestamp}\t{val_bpb:.6f}\t{total_training_time:.1f}\t{t_eval - t_start:.1f}\t{peak_vram_mb:.1f}\t{total_tokens / 1e6:.1f}\t{step}\t{num_params / 1e6:.1f}\t{DEPTH}\t{time_budget}\n")
+    print(f"Results saved to {results_file}")
+
+    # Git: commit all changes and push
+    print("Committing and pushing to git...")
+    repo_dir = Path(__file__).parent
+    subprocess.run(["git", "add", "-A"], cwd=repo_dir, check=True)
+    has_changes = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"], cwd=repo_dir
+    ).returncode != 0
+    if has_changes:
+        commit_msg = f"Training run: val_bpb={val_bpb:.4f} depth={DEPTH} time={total_training_time:.0f}s"
+        subprocess.run(["git", "commit", "-m", commit_msg], cwd=repo_dir, check=True)
+        subprocess.run(["git", "push"], cwd=repo_dir, check=True)
+        print("Git push complete.")
+    else:
+        print("No changes to commit.")
