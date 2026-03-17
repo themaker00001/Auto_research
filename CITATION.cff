@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "autoresearch-mlx: Apple Silicon MLX Port of Autoresearch"
+authors:
+  - family-names: "Goyal"
+    given-names: "Naman"
+    orcid: "https://orcid.org/0000-0001-9303-7934"
+type: software
+license: MIT
+doi: "10.5281/zenodo.18956067"
+url: "https://github.com/thenamangoyal/autoresearch"
+repository-code: "https://github.com/thenamangoyal/autoresearch"
+date-released: "2026-03-10"
+keywords:
+  - "machine learning"
+  - "language models"
+  - "apple silicon"
+  - "mlx"
+  - "autonomous research"
+  - "pretraining"
+preferred-citation:
+  type: article
+  title: "Your MacBook Can Do Autonomous AI Research Now"
+  authors:
+    - family-names: "Goyal"
+      given-names: "Naman"
+      orcid: "https://orcid.org/0000-0001-9303-7934"
+  year: 2026
+  month: 3
+  doi: "10.5281/zenodo.18956067"
+  url: "https://namangoyal.com/blog/2026/autoresearch-mlx/"
+  journal: "namangoyal.com"
+references:
+  - type: software
+    title: "autoresearch"
+    authors:
+      - family-names: "Karpathy"
+        given-names: "Andrej"
+    url: "https://github.com/karpathy/autoresearch"
