@@ -154,7 +154,7 @@ class GPT(nn.Module):
         head_dim = config.n_embd // config.n_head
         kv_dim = config.n_kv_head * head_dim
         self.value_embeds = {
-            str(i): nn.Embedding(config.vocab_size, kv_dim)
+            f"l{i}": nn.Embedding(config.vocab_size, kv_dim)
             for i in range(config.n_layer) if has_ve(i, config.n_layer)
         }
         self._mask_cache = {}
@@ -245,7 +245,7 @@ class GPT(nn.Module):
         x0 = x
         for i, block in enumerate(self.blocks):
             x = self.resid_lambdas[i] * x + self.x0_lambdas[i] * x0
-            ve = self.value_embeds[str(i)](idx) if str(i) in self.value_embeds else None
+            ve = self.value_embeds[f"l{i}"](idx) if f"l{i}" in self.value_embeds else None
             x = block(x, ve, masks[i])
         x = norm(x)
 
